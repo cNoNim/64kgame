@@ -1,9 +1,8 @@
 #include "stdafx.h"
 #include "game.h"
 
-static LRESULT CALLBACK WndProc( HWND window, UINT message, WPARAM wParam, LPARAM lParam);
-
 extern const PIXELFORMATDESCRIPTOR pfd;
+static LRESULT CALLBACK WndProc( HWND window, UINT message, WPARAM wParam, LPARAM lParam);
 
 namespace game
 {

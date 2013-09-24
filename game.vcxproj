@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\game.cpp" />
+    <ClCompile Include="src\GL\glfunctions.cpp" />
     <ClCompile Include="src\utils.cpp" />
     <ClCompile Include="src\windows\main_debug.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -30,6 +31,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\GL\glcorearb.h" />
+    <ClInclude Include="inc\GL\glfunctions.h" />
     <ClInclude Include="inc\utils.h" />
     <ClInclude Include="inc\game.h" />
     <ClInclude Include="inc\stdafx.h" />
