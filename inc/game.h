@@ -20,4 +20,3 @@ namespace game
     bool fullscreen;
   };
 }
-

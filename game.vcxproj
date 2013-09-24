@@ -111,7 +111,7 @@
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
       <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
       <CallingConvention>FastCall</CallingConvention>
       <AdditionalIncludeDirectories>inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -120,6 +120,9 @@
       <OpenMPSupport>false</OpenMPSupport>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>Full</Optimization>
+      <OmitFramePointers>true</OmitFramePointers>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+      <FloatingPointModel>Fast</FloatingPointModel>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -140,7 +143,7 @@
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <FunctionLevelLinking>false</FunctionLevelLinking>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
       <FloatingPointModel>Fast</FloatingPointModel>
       <AssemblerOutput>AssemblyAndSourceCode</AssemblerOutput>
       <CallingConvention>FastCall</CallingConvention>
@@ -157,7 +160,6 @@
       <SubSystem>Windows</SubSystem>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <AdditionalDependencies>User32.lib;Kernel32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
-      <GenerateMapFile>true</GenerateMapFile>
       <EntryPointSymbol>entrypoint</EntryPointSymbol>
       <AdditionalOptions>/CRINKLER /COMPMODE:SLOW %(AdditionalOptions)</AdditionalOptions>
     </Link>

@@ -8,5 +8,4 @@
 #include <Windows.h>
 #include <GL\GL.h>
 
-
 #include "utils.h"

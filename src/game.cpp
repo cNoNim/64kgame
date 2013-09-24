@@ -98,8 +98,8 @@ const PIXELFORMATDESCRIPTOR pfd = {
   32,
   0, 0, 0, 0, 0, 0, 0, 0,
   0, 0, 0, 0, 0,
-  32,             // zbuffer
-  0,              // stencil!
+  32,
+  0,
   0,
   PFD_MAIN_PLANE,
   0, 0, 0, 0

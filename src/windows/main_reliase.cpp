@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "game.h"
 
+extern "C" int _fltused = 0;
+
 void 
 entrypoint(void)
 {
