@@ -1,5 +1,10 @@
 #pragma once
 
+#define STRING(str) #str
+
+#define thread_local __declspec(thread) static
+
+#include <Assert.h>
 #include <TChar.h>
 #include <StdLib.h>
 #include <String.h>
@@ -10,4 +15,5 @@
 #include <GL/GL.h>
 #include <GL/glcorearb.h>
 
-#include "utils.h"
+#include "utils.hxx"
+

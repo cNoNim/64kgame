@@ -16,7 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\game.cpp" />
-    <ClCompile Include="src\GL\glfunctions.cpp" />
+    <ClCompile Include="src\GL\gl.context.cpp" />
     <ClCompile Include="src\utils.cpp" />
     <ClCompile Include="src\windows\main_debug.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
@@ -31,11 +31,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\GL\gl.context.hxx" />
     <ClInclude Include="inc\GL\glcorearb.h" />
-    <ClInclude Include="inc\GL\glfunctions.h" />
-    <ClInclude Include="inc\utils.h" />
-    <ClInclude Include="inc\game.h" />
-    <ClInclude Include="inc\stdafx.h" />
+    <ClInclude Include="inc\GL\gl.functions.inc" />
+    <ClInclude Include="inc\utils.hxx" />
+    <ClInclude Include="inc\game.hxx" />
+    <ClInclude Include="inc\stdafx.hxx" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1AE50072-5938-49C2-8A6B-AC3AE02C5454}</ProjectGuid>
@@ -98,6 +99,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>stdafx.hxx</PrecompiledHeaderFile>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -124,17 +126,19 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>Full</Optimization>
       <OmitFramePointers>true</OmitFramePointers>
-      <OmitDefaultLibName>true</OmitDefaultLibName>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <PrecompiledHeaderFile>stdafx.hxx</PrecompiledHeaderFile>
+      <OmitDefaultLibName>true</OmitDefaultLibName>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>User32.lib;Kernel32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
       <GenerateMapFile>true</GenerateMapFile>
       <EntryPointSymbol>entrypoint</EntryPointSymbol>
+      <AdditionalDependencies>User32.lib;Kernel32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">
@@ -156,15 +160,17 @@
       <OpenMPSupport>false</OpenMPSupport>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>Full</Optimization>
+      <PrecompiledHeaderFile>stdafx.hxx</PrecompiledHeaderFile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>User32.lib;Kernel32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
       <EntryPointSymbol>entrypoint</EntryPointSymbol>
       <AdditionalOptions>/CRINKLER /COMPMODE:SLOW %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>User32.lib;Kernel32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
