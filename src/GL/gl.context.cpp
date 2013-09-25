@@ -40,7 +40,7 @@ static gl::FunctionID init(gl::GLContext & _this)
 {
   static char const FunctionNames[] = {
 #define GLFUNCTION(name, UPPER) \
-"gl"STRING(name)"\x0"
+"gl"STRING(name)"\0"
 #include <GL/gl.functions.inc>
 #undef GLFUNCTION
     ""

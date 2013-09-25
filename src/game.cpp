@@ -5,35 +5,27 @@ static LRESULT CALLBACK WndProc( HWND window, UINT message, WPARAM wParam, LPARA
 
 namespace game
 {
-  app::app(HINSTANCE instance, bool fullscreen) : 
-    instance(instance),
+  app::app(void) : 
     window((
-      [](HINSTANCE instance, bool fullscreen) { 
+      []() { 
         DWORD styleEx = WS_EX_APPWINDOW, 
-          style = WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+          style = WS_VISIBLE | WS_SIZEBOX | WS_POPUP;
 
         WNDCLASS wc = { 0 };
 
         wc.style = CS_OWNDC;
         wc.lpfnWndProc = WndProc;
-        wc.hInstance = instance;
+        wc.hInstance = THIS_INSTANCE;
         wc.lpszClassName = TEXT("64k_game");
 
         if (!RegisterClass(&wc)) Error(TEXT("Can't register class"));
 
-        if (fullscreen) {
-          style |= WS_POPUP;
-		      ShowCursor( 0 );
-        } else {
-          style |= WS_CAPTION | WS_SYSMENU;
-        }
-
         auto window = CreateWindowEx( styleEx, wc.lpszClassName, wc.lpszClassName, style,
                                     CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-                                    nullptr, nullptr, instance, nullptr);
+                                    nullptr, nullptr, THIS_INSTANCE, nullptr);
         if (!window) Error(TEXT("Can't create window"));
         return window;
-      })(instance, fullscreen)),
+      })()),
     device((
       [] (HWND window) {
         auto device = GetDC(window); 
@@ -72,15 +64,86 @@ namespace game
   }
 }
 
+static LRESULT HitTest(HWND window, WPARAM wParam, LPARAM lParam) 
+{
+  UNREFERENCED_PARAMETER(wParam);
+  POINT mouse = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+  RECT windowRect;
+  GetWindowRect(window, &windowRect);
+  RECT frameRect = { 0 };
+  AdjustWindowRectEx(&frameRect, WS_VISIBLE | WS_SIZEBOX | WS_POPUP | WS_CAPTION, FALSE, WS_EX_APPWINDOW);
+  
+  bool onBorder = false;
+  short row = 0, col = 0;
+
+  if ((mouse.y >= windowRect.top) 
+    && (mouse.y < windowRect.top - frameRect.bottom)) {
+    onBorder = mouse.y < (windowRect.top - frameRect.top);
+    row = -1;
+  } else if ( (mouse.y < windowRect.bottom) 
+           && (mouse.y >= windowRect.bottom - frameRect.bottom)) {
+    row = 1;
+  }
+
+  if ( (mouse.x >= windowRect.left)
+    && (mouse.x < windowRect.left - frameRect.left)) {
+    col = -1;
+  } else if ( (mouse.x < windowRect.right)
+           && (mouse.x >= windowRect.right - frameRect.right)) {
+    col = 1;
+  }
+
+
+  LRESULT hitTest[3][3] = {
+    { HTTOPLEFT,    onBorder ? HTTOP : HTCAPTION, HTTOPRIGHT    },
+    { HTLEFT,       HTNOWHERE,                    HTRIGHT       },
+    { HTBOTTOMLEFT, HTBOTTOM,                     HTBOTTOMRIGHT }
+  };
+
+  return hitTest[row + 1][col + 1];
+}
+
 static LRESULT CALLBACK
 WndProc( HWND window, UINT message, WPARAM wParam, LPARAM lParam)
 {
+  if (message == WM_CREATE) {
+    RECT rect;
+    GetWindowRect(window, &rect);
+
+    SetWindowPos(window, 
+      NULL, 
+      rect.left, rect.top,
+      RECTWIDTH(rect), RECTHEIGHT(rect),
+      SWP_FRAMECHANGED);
+  }
+
+  if (message == WM_ACTIVATE) {
+    MARGINS margins = { 0 };
+    DwmExtendFrameIntoClientArea(window, &margins);
+    return 0;
+  }
+
+  if ((message == WM_NCCALCSIZE) && (wParam == TRUE)) {
+    return 0;
+  }
+
+  if (message == WM_NCHITTEST) {
+    return HitTest(window, wParam, lParam);
+  }
+
   if (message == WM_CLOSE || 
     (message == WM_KEYDOWN && wParam==VK_ESCAPE) )
 	{
     PostQuitMessage(0);
     return 0 ;
 	}
+
+  if (message == WM_GETMINMAXINFO) {
+    auto & minmax = *reinterpret_cast<MINMAXINFO *>(lParam);
+    minmax.ptMinTrackSize.x = 640;
+    minmax.ptMinTrackSize.y = 480;
+    return 0;
+  }
 
   return DefWindowProc(window, message, wParam, lParam);
 }

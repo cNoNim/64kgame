@@ -2,7 +2,7 @@
 #include "game.hxx"
 #include "new.h"
 
-extern "C" int _fltused = 0;
+EXTERN_C INT _fltused = 0;
 
 static DWORD tlsID;
 
@@ -23,7 +23,7 @@ entrypoint(void)
 
   if(!TlsSetValue(tlsID, storage)) Error(TEXT("Can't set thread local storage"));
 
-  game::app * app = new (storage) game::app(GetModuleHandle(nullptr), YesNo(TEXT("Run in fullscreen?")));
+  game::app * app = new (storage) game::app();
 
   ExitProcess(app->run());
 }

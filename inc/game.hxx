@@ -7,12 +7,11 @@ namespace game
   class app
   {
   public:
-    app(HINSTANCE instance, bool fullscreen = false);
+    app(void);
     ~app(void);
     int run(void);
     void tick(void);
   private:
-    HINSTANCE instance;
     HWND window;
     HDC device;
     gl::GLContext context;

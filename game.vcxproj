@@ -104,7 +104,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>User32.lib;Kernel32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
+      <AdditionalDependencies>User32.lib;Kernel32.lib;Gdi32.lib;OpenGL32.lib;Dwmapi.lib;UxTheme.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -138,7 +138,7 @@
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateMapFile>true</GenerateMapFile>
       <EntryPointSymbol>entrypoint</EntryPointSymbol>
-      <AdditionalDependencies>User32.lib;Kernel32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
+      <AdditionalDependencies>User32.lib;Kernel32.lib;Gdi32.lib;OpenGL32.lib;Dwmapi.lib;UxTheme.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">
@@ -170,7 +170,7 @@
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <EntryPointSymbol>entrypoint</EntryPointSymbol>
       <AdditionalOptions>/CRINKLER /COMPMODE:SLOW %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>User32.lib;Kernel32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
+      <AdditionalDependencies>User32.lib;Kernel32.lib;Gdi32.lib;OpenGL32.lib;Dwmapi.lib;UxTheme.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -12,8 +12,17 @@
 #define WIN32_LEAN_AND_MEAN
 #define WIN32_EXTRA_LEAN
 #include <Windows.h>
+#include <WindowsX.h>
+#include <UxTheme.h>
+#include <DWMApi.h>
 #include <GL/GL.h>
 #include <GL/glcorearb.h>
 
+#define RECTWIDTH(rect) (rect.right - rect.left)
+#define RECTHEIGHT(rect) (rect.bottom - rect.top)
+
 #include "utils.hxx"
 
+EXTERN_C IMAGE_DOS_HEADER __ImageBase;
+
+#define THIS_INSTANCE (reinterpret_cast<HINSTANCE>(&__ImageBase))
