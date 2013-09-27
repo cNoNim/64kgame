@@ -1,19 +1,19 @@
 #pragma once
 
-#include "GL/gl.context.hxx"
+#include "GL/gl.functions.hxx"
 
 namespace game
 {
-  class app
+  class application
   {
+    GL gl;
+    void * window;
   public:
-    app(void);
-    ~app(void);
+    static application & instance(void);
     int run(void);
-    void tick(void);
   private:
-    HWND window;
-    HDC device;
-    gl::GLContext context;
+    application(void);
+    application(application const &);
+    ~application(void) {}
   };
 }

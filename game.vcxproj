@@ -16,25 +16,28 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\game.cpp" />
-    <ClCompile Include="src\GL\gl.context.cpp" />
-    <ClCompile Include="src\utils.cpp" />
-    <ClCompile Include="src\windows\main_debug.cpp">
+    <ClCompile Include="src\GL\gl.functions.cpp" />
+    <ClCompile Include="src\sys\memory.cpp" />
+    <ClCompile Include="src\sys\core.cpp" />
+    <ClCompile Include="src\sys\main_debug.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="src\windows\main_reliase.cpp">
+    <ClCompile Include="src\sys\main_reliase.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\sys\window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\GL\gl.context.hxx" />
+    <ClInclude Include="inc\GL\gl.functions.hxx" />
     <ClInclude Include="inc\GL\glcorearb.h" />
     <ClInclude Include="inc\GL\gl.functions.inc" />
-    <ClInclude Include="inc\utils.hxx" />
+    <ClInclude Include="inc\sys\memory.hxx" />
+    <ClInclude Include="inc\sys\core.hxx" />
     <ClInclude Include="inc\game.hxx" />
     <ClInclude Include="inc\stdafx.hxx" />
   </ItemGroup>
@@ -60,7 +63,6 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
-    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />

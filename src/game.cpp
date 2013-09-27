@@ -1,47 +1,43 @@
 #include "stdafx.hxx"
 #include "game.hxx"
 
-static LRESULT CALLBACK WndProc( HWND window, UINT message, WPARAM wParam, LPARAM lParam);
+#include <new.h>
+
+static void * create_window(wchar_t const * name);
+static LRESULT CALLBACK window_proc( HWND window, UINT message, WPARAM wParam, LPARAM lParam);
+
+static LRESULT create(HWND window);
+static LRESULT hit_test(HWND window, int x, int y);
 
 namespace game
 {
-  app::app(void) : 
-    window((
-      []() { 
-        DWORD styleEx = WS_EX_APPWINDOW, 
-          style = WS_VISIBLE | WS_SIZEBOX | WS_POPUP;
+  static void tick(void);
 
-        WNDCLASS wc = { 0 };
+  application & application::instance() {
+    static unsigned int ID = TlsAlloc();
+    if (TLS_OUT_OF_INDEXES == ID) Error(TEXT("Out of TLS indexes."));
 
-        wc.style = CS_OWNDC;
-        wc.lpfnWndProc = WndProc;
-        wc.hInstance = THIS_INSTANCE;
-        wc.lpszClassName = TEXT("64k_game");
+    auto storage = TlsGetValue(ID);
+    if (nullptr == storage) {
+      storage = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(application));
+      if (nullptr == storage) Error(TEXT("Out of memory in process heap."));
 
-        if (!RegisterClass(&wc)) Error(TEXT("Can't register class"));
+      new (storage) game::application;
 
-        auto window = CreateWindowEx( styleEx, wc.lpszClassName, wc.lpszClassName, style,
-                                    CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-                                    nullptr, nullptr, THIS_INSTANCE, nullptr);
-        if (!window) Error(TEXT("Can't create window"));
-        return window;
-      })()),
-    device((
-      [] (HWND window) {
-        auto device = GetDC(window); 
-        if (!device) Error(TEXT("Can't get device context"));
-        return device;
-      })(window)),
-    context(device)
-  {
-    SetForegroundWindow(window);
-    SetFocus(window);
+      TlsSetValue(ID, storage);
+    }
+    
+    return *static_cast<game::application *>(storage);
   }
 
-  app::~app(void) {}
+  application::application(void)
+  { 
+    create_window(TEXT("x64_game"));
+    gl.init();
+  }
 
   int 
-  app::run(void)
+  application::run(void)
   {
     MSG msg = { 0 };
     glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
@@ -51,71 +47,47 @@ namespace game
         DispatchMessage(&msg);
       else {
         tick();
-        SwapBuffers(device);
+        SwapBuffers(wglGetCurrentDC());
       }
     }
     return EXIT_SUCCESS;
   }
 
-  void
-  app::tick(void)
+  static void 
+  tick(void)
   {
     glClear( GL_COLOR_BUFFER_BIT );
   }
 }
 
-static LRESULT HitTest(HWND window, WPARAM wParam, LPARAM lParam) 
+static void * create_window(wchar_t const * name)
 {
-  UNREFERENCED_PARAMETER(wParam);
-  POINT mouse = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
-  RECT windowRect;
-  GetWindowRect(window, &windowRect);
-  RECT frameRect = { 0 };
-  AdjustWindowRectEx(&frameRect, WS_VISIBLE | WS_SIZEBOX | WS_POPUP | WS_CAPTION, FALSE, WS_EX_APPWINDOW);
-  
-  bool onBorder = false;
-  short row = 0, col = 0;
+  static ATOM window_class = 0;
+  if (0 == window_class) {
+      WNDCLASS wc = { 0 };
 
-  if ((mouse.y >= windowRect.top) 
-    && (mouse.y < windowRect.top - frameRect.bottom)) {
-    onBorder = mouse.y < (windowRect.top - frameRect.top);
-    row = -1;
-  } else if ( (mouse.y < windowRect.bottom) 
-           && (mouse.y >= windowRect.bottom - frameRect.bottom)) {
-    row = 1;
+      wc.style = CS_OWNDC;
+      wc.lpfnWndProc = window_proc;
+      wc.hInstance = THIS_INSTANCE;
+      wc.lpszClassName = name;
+
+      window_class = RegisterClass(&wc);
+      if (0 == window_class) Error(TEXT("Window class not registered."));
   }
 
-  if ( (mouse.x >= windowRect.left)
-    && (mouse.x < windowRect.left - frameRect.left)) {
-    col = -1;
-  } else if ( (mouse.x < windowRect.right)
-           && (mouse.x >= windowRect.right - frameRect.right)) {
-    col = 1;
-  }
-
-
-  LRESULT hitTest[3][3] = {
-    { HTTOPLEFT,    onBorder ? HTTOP : HTCAPTION, HTTOPRIGHT    },
-    { HTLEFT,       HTNOWHERE,                    HTRIGHT       },
-    { HTBOTTOMLEFT, HTBOTTOM,                     HTBOTTOMRIGHT }
-  };
-
-  return hitTest[row + 1][col + 1];
+  unsigned long const styleEx = WS_EX_APPWINDOW, style = WS_VISIBLE | WS_SIZEBOX | WS_POPUP;
+  auto handle = CreateWindowEx(styleEx, name, name, style,
+    CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+    nullptr, nullptr, THIS_INSTANCE, nullptr);
+  if (!handle) Error(TEXT("Window not created."));
+  return handle;
 }
 
 static LRESULT CALLBACK
-WndProc( HWND window, UINT message, WPARAM wParam, LPARAM lParam)
+window_proc( HWND window, UINT message, WPARAM wParam, LPARAM lParam)
 {
-  if (message == WM_CREATE) {
-    RECT rect;
-    GetWindowRect(window, &rect);
-
-    SetWindowPos(window, 
-      NULL, 
-      rect.left, rect.top,
-      RECTWIDTH(rect), RECTHEIGHT(rect),
-      SWP_FRAMECHANGED);
-  }
+  if (message == WM_CREATE)
+    return create(window);
 
   if (message == WM_ACTIVATE) {
     MARGINS margins = { 0 };
@@ -128,11 +100,11 @@ WndProc( HWND window, UINT message, WPARAM wParam, LPARAM lParam)
   }
 
   if (message == WM_NCHITTEST) {
-    return HitTest(window, wParam, lParam);
+    return hit_test(window, wParam, lParam);
   }
 
-  if (message == WM_CLOSE || 
-    (message == WM_KEYDOWN && wParam==VK_ESCAPE) )
+  if ( message == WM_CLOSE 
+    || (message == WM_KEYDOWN && wParam==VK_ESCAPE) )
 	{
     PostQuitMessage(0);
     return 0 ;
@@ -146,4 +118,79 @@ WndProc( HWND window, UINT message, WPARAM wParam, LPARAM lParam)
   }
 
   return DefWindowProc(window, message, wParam, lParam);
+}
+
+static LRESULT
+create(HWND window) 
+{
+  // Create OpenGL context
+  static const PIXELFORMATDESCRIPTOR pfd = {
+    sizeof(PIXELFORMATDESCRIPTOR),
+    1,
+    PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,
+    PFD_TYPE_RGBA,
+    24, 0, 0, 0, 0, 0, 0, 8, 0,
+    0, 0, 0, 0, 0,
+    32,
+    0,
+    0,
+    PFD_MAIN_PLANE,
+    0, 0, 0, 0
+  };
+
+  auto device = GetDC(window); 
+  auto format = ChoosePixelFormat(device, &pfd);
+  SetPixelFormat(device, format, &pfd);
+    
+  auto rc = wglCreateContext(device);
+  wglMakeCurrent(device, rc);
+
+  // ...
+  RECT rect;
+  GetWindowRect(window, &rect);
+
+  SetWindowPos(window, 
+    NULL, 
+    rect.left, rect.top,
+    RECTWIDTH(rect), RECTHEIGHT(rect),
+    SWP_FRAMECHANGED);  
+
+  return 0;
+}
+
+static LRESULT 
+hit_test(HWND window, int x, int y) 
+{
+  RECT windowRect;
+  GetWindowRect(window, &windowRect);
+  RECT frameRect = { 0 };
+  AdjustWindowRectEx(&frameRect, WS_VISIBLE | WS_SIZEBOX | WS_POPUP | WS_CAPTION, FALSE, WS_EX_APPWINDOW);
+  
+  bool onBorder = false;
+  short row = 0, col = 0;
+
+  if ((y >= windowRect.top) 
+    && (y < windowRect.top - frameRect.bottom)) {
+    onBorder = y < (windowRect.top - frameRect.top);
+    row = -1;
+  } else if ( (y < windowRect.bottom) 
+           && (y >= windowRect.bottom - frameRect.bottom)) {
+    row = 1;
+  }
+
+  if ( (x >= windowRect.left)
+    && (x < windowRect.left - frameRect.left)) {
+    col = -1;
+  } else if ( (x < windowRect.right)
+           && (x >= windowRect.right - frameRect.right)) {
+    col = 1;
+  }
+
+  LRESULT test[3][3] = {
+    { HTTOPLEFT,    onBorder ? HTTOP : HTCAPTION, HTTOPRIGHT    },
+    { HTLEFT,       HTNOWHERE,                    HTRIGHT       },
+    { HTBOTTOMLEFT, HTBOTTOM,                     HTBOTTOMRIGHT }
+  };
+
+  return test[row + 1][col + 1];
 }

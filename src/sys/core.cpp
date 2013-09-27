@@ -1,5 +1,5 @@
 #include "stdafx.hxx"
-#include "utils.hxx"
+#include "sys/core.hxx"
 
 void Error(TCHAR const * message) {
   MessageBox(nullptr, message, TEXT("Error!"), MB_ICONERROR | MB_OK);

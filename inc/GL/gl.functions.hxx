@@ -1,6 +1,6 @@
 #pragma once
 
-namespace gl
+namespace game
 {
   enum class FunctionID : size_t {
 #define GLFUNCTION(name, UPPER) \
@@ -10,16 +10,13 @@ namespace gl
     count
   };
 
-  struct GLContext
+  struct GL
   {
-    HGLRC rc;
-
 #define GLFUNCTION(name, UPPER) \
   PFNGL ## UPPER ## PROC name;
 #include "GL/gl.functions.inc"
 #undef GLFUNCTION
 
-    GLContext(HDC device);
-    ~GLContext();
+    void init(void);
   };
 }

@@ -1,8 +1,6 @@
 #pragma once
 
-#define STRING(str) #str
-
-#define thread_local __declspec(thread) static
+#define STRING(string) #string
 
 #include <Assert.h>
 #include <TChar.h>
@@ -21,7 +19,7 @@
 #define RECTWIDTH(rect) (rect.right - rect.left)
 #define RECTHEIGHT(rect) (rect.bottom - rect.top)
 
-#include "utils.hxx"
+#include "sys/core.hxx"
 
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
