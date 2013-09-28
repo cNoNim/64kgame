@@ -17,6 +17,7 @@
   <ItemGroup>
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\GL\gl.functions.cpp" />
+    <ClCompile Include="src\sys\error.cpp" />
     <ClCompile Include="src\sys\memory.cpp" />
     <ClCompile Include="src\sys\core.cpp" />
     <ClCompile Include="src\sys\main_debug.cpp">
@@ -36,10 +37,14 @@
     <ClInclude Include="inc\GL\gl.functions.hxx" />
     <ClInclude Include="inc\GL\glcorearb.h" />
     <ClInclude Include="inc\GL\gl.functions.inc" />
+    <ClInclude Include="inc\sys\error.hxx" />
     <ClInclude Include="inc\sys\memory.hxx" />
     <ClInclude Include="inc\sys\core.hxx" />
     <ClInclude Include="inc\game.hxx" />
     <ClInclude Include="inc\stdafx.hxx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="inc\sys\error.inc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1AE50072-5938-49C2-8A6B-AC3AE02C5454}</ProjectGuid>
@@ -113,7 +118,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>

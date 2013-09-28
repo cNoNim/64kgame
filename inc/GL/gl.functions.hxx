@@ -5,7 +5,7 @@ namespace game
   enum class FunctionID : size_t {
 #define GLFUNCTION(name, UPPER) \
   UPPER,
-#include <GL/gl.functions.inc>
+#include "GL/gl.functions.inc"
 #undef GLFUNCTION
     count
   };

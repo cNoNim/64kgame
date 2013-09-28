@@ -9,7 +9,7 @@ namespace game
     static char const FunctionNames[] = {
 #define GLFUNCTION(name, UPPER) \
   "gl"STRING(name)"\0"
-#include <GL/gl.functions.inc>
+#include "GL/gl.functions.inc"
 #undef GLFUNCTION
       ""
     };
@@ -25,7 +25,7 @@ namespace game
       str += strlen( str ) + 1;     
     }
       
-    if (FunctionID::count != static_cast<FunctionID>(ID)) Error(TEXT("GL not initialized"));
+    if (FunctionID::count != static_cast<FunctionID>(ID)) Raise(error::GLFunctionInitialization);
   }
 
 }

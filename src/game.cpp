@@ -6,21 +6,22 @@
 static void * create_window(wchar_t const * name);
 static LRESULT CALLBACK window_proc( HWND window, UINT message, WPARAM wParam, LPARAM lParam);
 
-static LRESULT create(HWND window);
-static LRESULT hit_test(HWND window, int x, int y);
+static LRESULT on_create(HWND window);
+static LRESULT on_hittest(HWND window, int x, int y);
 
 namespace game
 {
-  static void tick(void);
+  static void init(application & app);
+  static void tick(application & app);
 
   application & application::instance() {
     static unsigned int ID = TlsAlloc();
-    if (TLS_OUT_OF_INDEXES == ID) Error(TEXT("Out of TLS indexes."));
+    if (TLS_OUT_OF_INDEXES == ID) Raise(error::OutOfTLS);
 
     auto storage = TlsGetValue(ID);
     if (nullptr == storage) {
       storage = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(application));
-      if (nullptr == storage) Error(TEXT("Out of memory in process heap."));
+      if (nullptr == storage) Raise(error::OutOfMemory);
 
       new (storage) game::application;
 
@@ -31,7 +32,7 @@ namespace game
   }
 
   application::application(void)
-  { 
+  {
     create_window(TEXT("x64_game"));
     gl.init();
   }
@@ -40,27 +41,33 @@ namespace game
   application::run(void)
   {
     MSG msg = { 0 };
-    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+    init(*this);
     while(msg.message != WM_QUIT)
     {
       if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
         DispatchMessage(&msg);
       else {
-        tick();
+        tick(*this);
         SwapBuffers(wglGetCurrentDC());
       }
     }
     return EXIT_SUCCESS;
   }
 
-  static void 
-  tick(void)
+  inline void
+  init(application & /*app*/)
+  {
+    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+  }
+
+  inline void 
+  tick(application & /*app*/)
   {
     glClear( GL_COLOR_BUFFER_BIT );
   }
 }
 
-static void * create_window(wchar_t const * name)
+void * create_window(wchar_t const * name)
 {
   static ATOM window_class = 0;
   if (0 == window_class) {
@@ -72,22 +79,22 @@ static void * create_window(wchar_t const * name)
       wc.lpszClassName = name;
 
       window_class = RegisterClass(&wc);
-      if (0 == window_class) Error(TEXT("Window class not registered."));
+      if (0 == window_class) Raise(game::error::WindowClassRegistration);
   }
 
   unsigned long const styleEx = WS_EX_APPWINDOW, style = WS_VISIBLE | WS_SIZEBOX | WS_POPUP;
   auto handle = CreateWindowEx(styleEx, name, name, style,
     CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
     nullptr, nullptr, THIS_INSTANCE, nullptr);
-  if (!handle) Error(TEXT("Window not created."));
+  if (!handle) Raise(game::error::WindowCreation);
   return handle;
 }
 
-static LRESULT CALLBACK
+LRESULT CALLBACK
 window_proc( HWND window, UINT message, WPARAM wParam, LPARAM lParam)
 {
   if (message == WM_CREATE)
-    return create(window);
+    return on_create(window);
 
   if (message == WM_ACTIVATE) {
     MARGINS margins = { 0 };
@@ -100,7 +107,7 @@ window_proc( HWND window, UINT message, WPARAM wParam, LPARAM lParam)
   }
 
   if (message == WM_NCHITTEST) {
-    return hit_test(window, wParam, lParam);
+    return on_hittest(window, wParam, lParam);
   }
 
   if ( message == WM_CLOSE 
@@ -120,8 +127,8 @@ window_proc( HWND window, UINT message, WPARAM wParam, LPARAM lParam)
   return DefWindowProc(window, message, wParam, lParam);
 }
 
-static LRESULT
-create(HWND window) 
+LRESULT
+on_create(HWND window) 
 {
   // Create OpenGL context
   static const PIXELFORMATDESCRIPTOR pfd = {
@@ -158,8 +165,8 @@ create(HWND window)
   return 0;
 }
 
-static LRESULT 
-hit_test(HWND window, int x, int y) 
+LRESULT 
+on_hittest(HWND window, int x, int y) 
 {
   RECT windowRect;
   GetWindowRect(window, &windowRect);

@@ -6,8 +6,8 @@ namespace game
 {
   class application
   {
-    GL gl;
     void * window;
+    GL gl;
   public:
     static application & instance(void);
     int run(void);

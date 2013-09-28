@@ -19,8 +19,11 @@
 #define RECTWIDTH(rect) (rect.right - rect.left)
 #define RECTHEIGHT(rect) (rect.bottom - rect.top)
 
-#include "sys/core.hxx"
-
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
 #define THIS_INSTANCE (reinterpret_cast<HINSTANCE>(&__ImageBase))
+
+#include "sys/core.hxx"
+#include "sys/error.hxx"
+
+
