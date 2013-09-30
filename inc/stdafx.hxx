@@ -16,6 +16,8 @@
 #include <GL/GL.h>
 #include <GL/glcorearb.h>
 
+#include <GLM/GLM.hpp>
+
 #define RECTWIDTH(rect) (rect.right - rect.left)
 #define RECTHEIGHT(rect) (rect.bottom - rect.top)
 
