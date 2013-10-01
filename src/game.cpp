@@ -3,18 +3,20 @@
 
 #include <new.h>
 
-static void * create_window(wchar_t const * name);
-static LRESULT CALLBACK window_proc( HWND window, UINT message, WPARAM wParam, LPARAM lParam);
-
-static LRESULT on_create(HWND window);
-static LRESULT on_hittest(HWND window, int x, int y);
+static void             createContext(HWND window, game::GL & functions);
+static void             createWindow(game::GL & functions);
+static void             destroyContext(HWND window);
+static ATOM             registerClass(void);
+static void             updateClipRect(HWND window);
+static LRESULT CALLBACK windowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam);
 
 namespace game
 {
   static void init(application & app);
   static void tick(application & app);
 
-  application & application::instance() {
+  application & application::instance()
+  {
     static unsigned int ID = TlsAlloc();
     if (TLS_OUT_OF_INDEXES == ID) Raise(error::OutOfTLS);
 
@@ -27,23 +29,20 @@ namespace game
 
       TlsSetValue(ID, storage);
     }
-    
+
     return *static_cast<game::application *>(storage);
   }
 
   application::application(void)
   {
-    create_window(TEXT("x64_game"));
-    gl.init();
+    createWindow(gl);
   }
 
-  int 
-  application::run(void)
+  int application::run(void)
   {
     MSG msg = { 0 };
     init(*this);
-    while(msg.message != WM_QUIT)
-    {
+    while (msg.message != WM_QUIT) {
       if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
         DispatchMessage(&msg);
       else {
@@ -54,150 +53,103 @@ namespace game
     return EXIT_SUCCESS;
   }
 
-  inline void
-  init(application & /*app*/)
+  inline void init(application & /*app*/)
   {
-    glClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
   }
 
-  inline void 
-  tick(application & /*app*/)
+  inline void tick(application & /*app*/)
   {
-    glClear( GL_COLOR_BUFFER_BIT );
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
   }
 }
 
-void * create_window(wchar_t const * name)
+void createContext(HWND window, game::GL & functions)
 {
-  static ATOM window_class = 0;
-  if (0 == window_class) {
-      WNDCLASS wc = { 0 };
-
-      wc.style = CS_OWNDC;
-      wc.lpfnWndProc = window_proc;
-      wc.hInstance = THIS_INSTANCE;
-      wc.lpszClassName = name;
-
-      window_class = RegisterClass(&wc);
-      if (0 == window_class) Raise(game::error::WindowClassRegistration);
-  }
-
-  unsigned long const styleEx = WS_EX_APPWINDOW, style = WS_VISIBLE | WS_SIZEBOX | WS_POPUP;
-  auto handle = CreateWindowEx(styleEx, name, name, style,
-    CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-    nullptr, nullptr, THIS_INSTANCE, nullptr);
-  if (!handle) Raise(game::error::WindowCreation);
-  return handle;
-}
-
-LRESULT CALLBACK
-window_proc( HWND window, UINT message, WPARAM wParam, LPARAM lParam)
-{
-  if (message == WM_CREATE)
-    return on_create(window);
-
-  if (message == WM_ACTIVATE) {
-    MARGINS margins = { 0 };
-    DwmExtendFrameIntoClientArea(window, &margins);
-    return 0;
-  }
-
-  if ((message == WM_NCCALCSIZE) && (wParam == TRUE)) {
-    return 0;
-  }
-
-  if (message == WM_NCHITTEST) {
-    return on_hittest(window, wParam, lParam);
-  }
-
-  if ( message == WM_CLOSE 
-    || (message == WM_KEYDOWN && wParam==VK_ESCAPE) )
-	{
-    PostQuitMessage(0);
-    return 0 ;
-	}
-
-  if (message == WM_GETMINMAXINFO) {
-    auto & minmax = *reinterpret_cast<MINMAXINFO *>(lParam);
-    minmax.ptMinTrackSize.x = 640;
-    minmax.ptMinTrackSize.y = 480;
-    return 0;
-  }
-
-  return DefWindowProc(window, message, wParam, lParam);
-}
-
-LRESULT
-on_create(HWND window) 
-{
-  // Create OpenGL context
   static const PIXELFORMATDESCRIPTOR pfd = {
-    sizeof(PIXELFORMATDESCRIPTOR),
-    1,
+    sizeof(PIXELFORMATDESCRIPTOR), 1,
     PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER,
     PFD_TYPE_RGBA,
-    24, 0, 0, 0, 0, 0, 0, 8, 0,
+    32, 0, 0, 0, 0, 0, 0, 8, 0,
     0, 0, 0, 0, 0,
-    32,
-    0,
+    24,
+    8,
     0,
     PFD_MAIN_PLANE,
     0, 0, 0, 0
   };
 
-  auto device = GetDC(window); 
+  auto device = GetDC(window);
   auto format = ChoosePixelFormat(device, &pfd);
   SetPixelFormat(device, format, &pfd);
-    
+
   auto rc = wglCreateContext(device);
   wglMakeCurrent(device, rc);
 
-  // ...
-  RECT rect;
-  GetWindowRect(window, &rect);
 
-  SetWindowPos(window, 
-    NULL, 
-    rect.left, rect.top,
-    RECTWIDTH(rect), RECTHEIGHT(rect),
-    SWP_FRAMECHANGED);  
-
-  return 0;
 }
 
-LRESULT 
-on_hittest(HWND window, int x, int y) 
+void createWindow(game::GL & functions)
 {
-  RECT windowRect;
-  GetWindowRect(window, &windowRect);
-  RECT frameRect = { 0 };
-  AdjustWindowRectEx(&frameRect, WS_VISIBLE | WS_SIZEBOX | WS_POPUP | WS_CAPTION, FALSE, WS_EX_APPWINDOW);
-  
-  bool onBorder = false;
-  short row = 0, col = 0;
+  static ATOM classAtom = registerClass();
 
-  if ((y >= windowRect.top) 
-    && (y < windowRect.top - frameRect.bottom)) {
-    onBorder = y < (windowRect.top - frameRect.top);
-    row = -1;
-  } else if ( (y < windowRect.bottom) 
-           && (y >= windowRect.bottom - frameRect.bottom)) {
-    row = 1;
+  DWORD const style = WS_CLIPCHILDREN | WS_CLIPCHILDREN | WS_POPUP,
+    styleEx = WS_EX_APPWINDOW;
+
+  auto window = CreateWindowEx(styleEx, MAKEINTRESOURCE(classAtom), TEXT("64k_game"), style,
+                               CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+                               nullptr, nullptr, THIS_INSTANCE, &functions);
+  if (!window) Raise(game::error::WindowCreation);
+
+  glClear(GL_COLOR_BUFFER_BIT);
+  SwapBuffers(wglGetCurrentDC());
+
+  ShowWindow(window, SW_SHOWMAXIMIZED);
+}
+
+void destroyContext(HWND window)
+{
+  auto device = wglGetCurrentDC();
+  auto rc = wglGetCurrentContext();
+  wglMakeCurrent(nullptr, nullptr);
+  wglDeleteContext(rc);
+  ReleaseDC(window, device);
+}
+
+ATOM registerClass(void)
+{
+  WNDCLASS wc = { 0 };
+  wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+  wc.lpfnWndProc = windowProc;
+  wc.hInstance = THIS_INSTANCE;
+  wc.hIcon = LoadIcon(nullptr, IDI_WINLOGO);
+  wc.lpszClassName = TEXT("64k_game");
+
+  auto classAtom = RegisterClass(&wc);
+  if (!classAtom) Raise(game::error::WindowClassRegistration);
+  return classAtom;
+}
+
+LRESULT CALLBACK windowProc(HWND window, UINT message, WPARAM wParam, LPARAM lParam)
+{
+  switch (message) {
+  case WM_CREATE:
+    createContext(window, *static_cast<game::GL *>(reinterpret_cast<CREATESTRUCT*>(lParam)->lpCreateParams));
+    break;
+  case WM_ACTIVATE:
+    if (WA_INACTIVE != LOWORD(wParam) && 0 == HIWORD(wParam))
+      ShowCursor(FALSE);
+    else
+      ShowCursor(TRUE);
+    return 0;
+  case WM_CLOSE:
+    destroyContext(window);
+    DestroyWindow(window);
+    return 0;
+  case WM_DESTROY:
+    PostQuitMessage(0);
+    return 0;
+  case WM_ERASEBKGND:
+    return TRUE;
   }
-
-  if ( (x >= windowRect.left)
-    && (x < windowRect.left - frameRect.left)) {
-    col = -1;
-  } else if ( (x < windowRect.right)
-           && (x >= windowRect.right - frameRect.right)) {
-    col = 1;
-  }
-
-  LRESULT test[3][3] = {
-    { HTTOPLEFT,    onBorder ? HTTOP : HTCAPTION, HTTOPRIGHT    },
-    { HTLEFT,       HTNOWHERE,                    HTRIGHT       },
-    { HTBOTTOMLEFT, HTBOTTOM,                     HTBOTTOMRIGHT }
-  };
-
-  return test[row + 1][col + 1];
+  return DefWindowProc(window, message, wParam, lParam);
 }

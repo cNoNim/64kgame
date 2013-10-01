@@ -1,7 +1,5 @@
 #pragma once
 
-#define STRING(string) #string
-
 #include <Assert.h>
 #include <TChar.h>
 #include <StdLib.h>
@@ -18,11 +16,12 @@
 
 #include <GLM/GLM.hpp>
 
+#define STRING(string) #string
+
 #define RECTWIDTH(rect) (rect.right - rect.left)
 #define RECTHEIGHT(rect) (rect.bottom - rect.top)
 
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
-
 #define THIS_INSTANCE (reinterpret_cast<HINSTANCE>(&__ImageBase))
 
 #include "sys/core.hxx"

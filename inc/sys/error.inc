@@ -2,7 +2,7 @@
 #define GAMEERROR(name, flag, message)
 #endif
 
-GAMEERROR(OutOfTLS, WinAPIError, "Out of TLS indexes.")
+GAMEERROR(OutOfTLS, WinAPIError, "Failed to allocate TLS index.")
 GAMEERROR(OutOfMemory, WinAPIError, "Out of memory.")
 
 GAMEERROR(WindowClassRegistration, WinAPIError, "Window Class not registred.")
