@@ -17,6 +17,7 @@
   <ItemGroup>
     <ClCompile Include="src\game.cpp" />
     <ClCompile Include="src\GL\gl.functions.cpp" />
+    <ClCompile Include="src\GL\wgl.functions.cpp" />
     <ClCompile Include="src\sys\error.cpp" />
     <ClCompile Include="src\sys\core.cpp" />
     <ClCompile Include="src\sys\main_debug.cpp">
@@ -36,6 +37,7 @@
     <ClInclude Include="inc\GL\gl.functions.hxx" />
     <ClInclude Include="inc\GL\glcorearb.h" />
     <ClInclude Include="inc\GL\gl.functions.inc" />
+    <ClInclude Include="inc\GL\wgl.functions.hxx" />
     <ClInclude Include="inc\GL\wglext.h" />
     <ClInclude Include="inc\sys\error.hxx" />
     <ClInclude Include="inc\sys\core.hxx" />
@@ -112,7 +114,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <AdditionalDependencies>User32.lib;Kernel32.lib;Gdi32.lib;OpenGL32.lib;Dwmapi.lib;UxTheme.lib</AdditionalDependencies>
+      <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -146,7 +148,9 @@
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateMapFile>true</GenerateMapFile>
       <EntryPointSymbol>entrypoint</EntryPointSymbol>
-      <AdditionalDependencies>User32.lib;Kernel32.lib;Gdi32.lib;OpenGL32.lib;Dwmapi.lib;UxTheme.lib</AdditionalDependencies>
+      <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
+      <HeapReserveSize>4096</HeapReserveSize>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">
@@ -178,7 +182,7 @@
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <EntryPointSymbol>entrypoint</EntryPointSymbol>
       <AdditionalOptions>/CRINKLER /COMPMODE:SLOW %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>User32.lib;Kernel32.lib;Gdi32.lib;OpenGL32.lib;Dwmapi.lib;UxTheme.lib</AdditionalDependencies>
+      <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

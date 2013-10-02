@@ -24,6 +24,9 @@ namespace game
       )
     {
       MessageBeep(MB_ICONERROR);
+
+
+
       ExitProcess(EXIT_FAILURE);
     }
   }

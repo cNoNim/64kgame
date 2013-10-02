@@ -16,7 +16,8 @@ namespace game
     enum FLAG
     {
       UnknownError = 0,
-      WinAPIError  = 1<<0
+      ApplicationError = 1 << 0,
+      WinAPIError  = 1<<1
     };
 
     struct error

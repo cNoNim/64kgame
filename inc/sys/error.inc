@@ -2,6 +2,8 @@
 #define GAMEERROR(name, flag, message)
 #endif
 
+GAMEERROR(CrossThreadAccess, ApplicationError, "Cross thread access to application instance.")
+
 GAMEERROR(OutOfTLS, WinAPIError, "Failed to allocate TLS index.")
 GAMEERROR(OutOfMemory, WinAPIError, "Out of memory.")
 

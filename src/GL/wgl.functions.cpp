@@ -1,33 +1,31 @@
 #include "stdafx.hxx"
-#include "GL/gl.functions.hxx"
+#include "GL/wgl.functions.hxx"
 
 namespace game
 {
-
-
   void 
-  GL::init(void)
+  WGL::init(void)
   {
     static char const FunctionNames[] = {
-#define GLFUNCTION(name, UPPER) \
-  "gl"STRING(name)"\0"
-#include "GL/gl.functions.inc"
-#undef GLFUNCTION
+#define WGLFUNCTION(name, UPPER) \
+  "wgl"STRING(name)"\0"
+#include "GL/wgl.functions.inc"
+#undef WGLFUNCTION
       ""
     };
   
     auto procs = reinterpret_cast<PROC *>(this);
     char const * str = FunctionNames;      
     size_t ID = 0;
-    for (; ID < static_cast<size_t>(GLFunction::count); ++ID)
+    for (; ID < static_cast<size_t>(WGLFunction::count); ++ID)
     {
       PROC &current = procs[ID];
       current = wglGetProcAddress( str );
       if( !current ) break;        
       str += strlen( str ) + 1;     
     }
-    
-    if (GLFunction::count != static_cast<GLFunction>(ID)) Raise(error::GLFunctionInitialization);
+      
+    if (WGLFunction::count != static_cast<WGLFunction>(ID)) Raise(error::GLFunctionInitialization);
   }
 
 }
