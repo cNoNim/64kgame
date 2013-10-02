@@ -36,12 +36,14 @@
     <ClInclude Include="inc\GL\gl.functions.hxx" />
     <ClInclude Include="inc\GL\glcorearb.h" />
     <ClInclude Include="inc\GL\gl.functions.inc" />
+    <ClInclude Include="inc\GL\wglext.h" />
     <ClInclude Include="inc\sys\error.hxx" />
     <ClInclude Include="inc\sys\core.hxx" />
     <ClInclude Include="inc\game.hxx" />
     <ClInclude Include="inc\stdafx.hxx" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="inc\GL\wgl.functions.inc" />
     <None Include="inc\sys\error.inc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

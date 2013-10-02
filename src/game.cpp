@@ -63,7 +63,7 @@ namespace game
   }
 }
 
-void createContext(HWND window, game::GL & functions)
+void createContext(HWND window, game::GL & gl)
 {
   static const PIXELFORMATDESCRIPTOR pfd = {
     sizeof(PIXELFORMATDESCRIPTOR), 1,
@@ -85,6 +85,7 @@ void createContext(HWND window, game::GL & functions)
   auto rc = wglCreateContext(device);
   wglMakeCurrent(device, rc);
 
+  gl.init();
 
 }
 

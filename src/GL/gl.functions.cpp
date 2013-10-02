@@ -11,6 +11,10 @@ namespace game
   "gl"STRING(name)"\0"
 #include "GL/gl.functions.inc"
 #undef GLFUNCTION
+#define WGLFUNCTION(name, UPPER) \
+  "wgl"STRING(name)"\0"
+#include "GL/wgl.functions.inc"
+#undef WGLFUNCTION
       ""
     };
   

@@ -1,0 +1,5 @@
+#ifndef WGLFUNCTION
+#define WGLFUNCTION(name, UPPER)
+#endif
+
+WGLFUNCTION(CreateContextAttribsARB, CREATECONTEXTATTRIBSARB)

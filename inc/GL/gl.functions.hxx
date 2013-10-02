@@ -7,6 +7,10 @@ namespace game
   UPPER,
 #include "GL/gl.functions.inc"
 #undef GLFUNCTION
+#define WGLFUNCTION(name, UPPER) \
+  UPPER,
+#include "GL/wgl.functions.inc"
+#undef WGLFUNCTION
     count
   };
 
@@ -16,6 +20,11 @@ namespace game
   PFNGL ## UPPER ## PROC name;
 #include "GL/gl.functions.inc"
 #undef GLFUNCTION
+
+#define WGLFUNCTION(name, UPPER) \
+  PFNWGL ## UPPER ## PROC name;
+#include "GL/wgl.functions.inc"
+#undef WGLFUNCTION
 
     void init(void);
   };
