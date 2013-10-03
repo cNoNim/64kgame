@@ -1,0 +1,44 @@
+#pragma once
+
+namespace core
+{
+  template<typename T, size_t SIZE>
+  struct array
+  {
+    typedef T                  value_type;
+    typedef value_type &       reference;
+    typedef value_type const & const_reference;
+    typedef value_type *       pointer;
+    typedef value_type const * const_pointer;
+    typedef pointer            iterator;
+    typedef const_pointer      const_iterator;
+    typedef size_t             size_type;
+    typedef ptrdiff_t          difference_type;
+
+    typedef size_t size_type;
+
+    value_type elements[SIZE > 0 ? SIZE : 1];
+
+    /*element access*/
+    inline reference                 operator[](size_type n) { return elements[n]; }
+    inline constexpr const_reference operator[](size_type n) const { return elements[n]; }
+    inline reference                 front() { return elements[0]; }
+    inline constexpr const_reference front() const { return elements[0]; }
+    inline reference                 back() { return elements[SIZE > 0 ? SIZE - 1 : 0]; }
+    inline constexpr const_reference back() const { return elements[SIZE > 0 ? SIZE - 1 : 0]; }
+    inline pointer       data() noexcept{ return pointer(elements); }
+    inline const_pointer data() const noexcept{ return pointer(elements); }
+
+    /*iterators*/
+    inline iterator       begin() noexcept{ return iterator(elements); }
+    inline const_iterator begin() const noexcept{ return const_iterator(elements); }
+    inline const_iterator cbegin() const noexcept{ return const_iterator(elements); }
+    inline iterator       end() noexcept{ return iterator(elements + SIZE); }
+    inline const_iterator end() const noexcept{ return const_iterator(elements); }
+    inline const_iterator cend() const noexcept{ return const_iterator(elements); }
+
+    /*capacity*/   
+    inline constexpr bool empty() const noexcept{ return 0 == SIZE; }
+    inline constexpr size_type size() const noexcept{ return SIZE; }    
+  };
+}

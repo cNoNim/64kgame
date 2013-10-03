@@ -16,7 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\game.cpp" />
-    <ClCompile Include="src\GL\x.functions.cpp" />
+    <ClCompile Include="src\GL\gl.functions.cpp" />
     <ClCompile Include="src\sys\application.cpp" />
     <ClCompile Include="src\sys\context.cpp" />
     <ClCompile Include="src\sys\error.cpp" />
@@ -39,8 +39,7 @@
     <ClInclude Include="inc\GL\gl.functions.hxx" />
     <ClInclude Include="inc\GL\glcorearb.h" />
     <ClInclude Include="inc\GL\gl.functions.inc" />
-    <ClInclude Include="inc\GL\wgl.functions.hxx" />
-    <ClInclude Include="inc\GL\wglext.h" />
+    <ClInclude Include="inc\resources.hxx" />
     <ClInclude Include="inc\sys\application.hxx" />
     <ClInclude Include="inc\sys\context.hxx" />
     <ClInclude Include="inc\sys\error.hxx" />
@@ -50,7 +49,7 @@
     <ClInclude Include="inc\sys\window.hxx" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="inc\GL\wgl.functions.inc" />
+    <None Include="inc\core\array" />
     <None Include="inc\sys\error.inc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -93,7 +92,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>obj\$(Configuration)\</IntDir>
-    <CustomBuildBeforeTargets>BuildCompile</CustomBuildBeforeTargets>
+    <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
     <ExecutablePath>$(SolutionDir)utils\resources;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -101,14 +100,14 @@
     <IntDir>obj\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
-    <CustomBuildBeforeTargets>BuildCompile</CustomBuildBeforeTargets>
+    <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
     <ExecutablePath>$(SolutionDir)utils\resources;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>obj\$(Configuration)\</IntDir>
     <ExecutablePath>$(SolutionDir)utils\resources;$(SolutionDir)utils\crinkler;$(ExecutablePath)</ExecutablePath>
-    <CustomBuildBeforeTargets>BuildCompile</CustomBuildBeforeTargets>
+    <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
     <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -126,11 +125,10 @@
       <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
-      <Command>resources</Command>
-    </CustomBuildStep>
-    <CustomBuildStep>
+      <Command>resources.exe $(ProjectDir)</Command>
       <Message>Build Resources</Message>
-      <Outputs>emb\resources.h</Outputs>
+      <Outputs>inc\resources.hxx</Outputs>
+      <Inputs>utils\resources\resources.exe</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -168,11 +166,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
-      <Command>resources $(ProjectDir)</Command>
-    </CustomBuildStep>
-    <CustomBuildStep>
+      <Command>resources.exe $(ProjectDir)</Command>
       <Message>Build Resources</Message>
-      <Outputs>emb\resources.h</Outputs>
+      <Outputs>inc\resources.hxx</Outputs>
+      <Inputs>utils\resources\resources.exe</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">
@@ -196,6 +193,7 @@
       <Optimization>Full</Optimization>
       <PrecompiledHeaderFile>stdafx.hxx</PrecompiledHeaderFile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OmitFramePointers>true</OmitFramePointers>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -207,9 +205,10 @@
       <TargetMachine>NotSet</TargetMachine>
     </Link>
     <CustomBuildStep>
+      <Command>resources.exe $(ProjectDir)</Command>
       <Message>Build Resources</Message>
-      <Command>resources</Command>
-      <Outputs>emb\resources.h</Outputs>
+      <Outputs>inc\resources.hxx</Outputs>
+      <Inputs>utils\resources\resources.exe</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

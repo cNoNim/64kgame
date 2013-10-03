@@ -1,4 +1,5 @@
-emb/
+inc/emb/*
+inc/resources.hxx
 #################
 ## Eclipse
 #################

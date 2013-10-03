@@ -1,11 +1,9 @@
 #include "stdafx.hxx"
 #include "GL/gl.functions.hxx"
-#include "GL/wgl.functions.hxx"
 
 static void initFunctions(char const * functionNames, PROC * funstions, size_t count);
 
 GL gl;
-WGL wgl;
 
 void 
 GL::init(void)
@@ -19,20 +17,6 @@ GL::init(void)
   };
   
   initFunctions(FunctionNames, reinterpret_cast<PROC *>(this), sizeof(GL) / sizeof(PROC *));
-}
-
-void
-WGL::init(void)
-{
-  static char const FunctionNames[] = {
-#define WGLFUNCTION(name, UPPER) \
-  "wgl"STRING(name)"\0"
-#include "GL/wgl.functions.inc"
-#undef WGLFUNCTION
-    ""
-  };
-
-  initFunctions(FunctionNames, reinterpret_cast<PROC *>(this), sizeof(WGL) / sizeof(PROC *));
 }
 
 static void initFunctions(char const * functionNames, PROC * funstions, size_t count)
