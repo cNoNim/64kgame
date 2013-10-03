@@ -3,7 +3,6 @@
 
 void init()
 {
-  MessageBoxA(nullptr, resources::foo().data(), "", 0);
 }
 
 void render()

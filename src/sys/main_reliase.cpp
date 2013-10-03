@@ -1,7 +1,7 @@
 #include "stdafx.hxx"
 #include "sys/application.hxx"
 
-EXTERN_C INT _fltused = 0;
+//EXTERN_C INT _fltused = 0;
 
 void
 entrypoint(void)

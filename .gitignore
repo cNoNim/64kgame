@@ -1,5 +1,6 @@
-inc/emb/*
 inc/resources.hxx
+resources.exe
+*.vshost.exe*
 #################
 ## Eclipse
 #################

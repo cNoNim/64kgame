@@ -90,23 +90,21 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
-    <IntDir>obj\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatfromShortName)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)\$(PlatfromShortName)\</IntDir>
     <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
-    <ExecutablePath>$(SolutionDir)utils\resources;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
-    <IntDir>obj\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatfromShortName)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)\$(PlatfromShortName)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
     <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
-    <ExecutablePath>$(SolutionDir)utils\resources;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
-    <IntDir>obj\$(Configuration)\</IntDir>
-    <ExecutablePath>$(SolutionDir)utils\resources;$(SolutionDir)utils\crinkler;$(ExecutablePath)</ExecutablePath>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatfromShortName)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)\$(PlatfromShortName)\</IntDir>
+    <ExecutablePath>$(SolutionDir)utils\crinkler;$(ExecutablePath)</ExecutablePath>
     <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
     <GenerateManifest>false</GenerateManifest>
   </PropertyGroup>
@@ -125,16 +123,14 @@
       <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
     </Link>
     <CustomBuildStep>
-      <Command>resources.exe $(ProjectDir)</Command>
+      <Command>resources.exe</Command>
       <Message>Build Resources</Message>
       <Outputs>inc\resources.hxx</Outputs>
-      <Inputs>utils\resources\resources.exe</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>false</ExceptionHandling>
@@ -154,6 +150,7 @@
       <PrecompiledHeaderFile>stdafx.hxx</PrecompiledHeaderFile>
       <OmitDefaultLibName>true</OmitDefaultLibName>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -166,10 +163,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
-      <Command>resources.exe $(ProjectDir)</Command>
+      <Command>resources.exe</Command>
       <Message>Build Resources</Message>
       <Outputs>inc\resources.hxx</Outputs>
-      <Inputs>utils\resources\resources.exe</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">
@@ -205,10 +201,9 @@
       <TargetMachine>NotSet</TargetMachine>
     </Link>
     <CustomBuildStep>
-      <Command>resources.exe $(ProjectDir)</Command>
+      <Command>resources.exe</Command>
       <Message>Build Resources</Message>
       <Outputs>inc\resources.hxx</Outputs>
-      <Inputs>utils\resources\resources.exe</Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
