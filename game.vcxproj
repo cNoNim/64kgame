@@ -16,10 +16,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\game.cpp" />
-    <ClCompile Include="src\GL\gl.functions.cpp" />
-    <ClCompile Include="src\GL\wgl.functions.cpp" />
+    <ClCompile Include="src\GL\x.functions.cpp" />
+    <ClCompile Include="src\sys\application.cpp" />
+    <ClCompile Include="src\sys\context.cpp" />
     <ClCompile Include="src\sys\error.cpp" />
-    <ClCompile Include="src\sys\core.cpp" />
     <ClCompile Include="src\sys\main_debug.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">true</ExcludedFromBuild>
@@ -32,6 +32,8 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\sys\time.cpp" />
+    <ClCompile Include="src\sys\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\GL\gl.functions.hxx" />
@@ -39,10 +41,13 @@
     <ClInclude Include="inc\GL\gl.functions.inc" />
     <ClInclude Include="inc\GL\wgl.functions.hxx" />
     <ClInclude Include="inc\GL\wglext.h" />
+    <ClInclude Include="inc\sys\application.hxx" />
+    <ClInclude Include="inc\sys\context.hxx" />
     <ClInclude Include="inc\sys\error.hxx" />
-    <ClInclude Include="inc\sys\core.hxx" />
     <ClInclude Include="inc\game.hxx" />
     <ClInclude Include="inc\stdafx.hxx" />
+    <ClInclude Include="inc\sys\time.hxx" />
+    <ClInclude Include="inc\sys\window.hxx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="inc\GL\wgl.functions.inc" />
@@ -62,7 +67,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120_xp</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -88,19 +93,23 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>obj\$(Configuration)\</IntDir>
+    <CustomBuildBeforeTargets>BuildCompile</CustomBuildBeforeTargets>
+    <ExecutablePath>$(SolutionDir)utils\resources;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>obj\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
+    <CustomBuildBeforeTargets>BuildCompile</CustomBuildBeforeTargets>
+    <ExecutablePath>$(SolutionDir)utils\resources;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>obj\$(Configuration)\</IntDir>
-    <LinkIncremental>false</LinkIncremental>
+    <ExecutablePath>$(SolutionDir)utils\resources;$(SolutionDir)utils\crinkler;$(ExecutablePath)</ExecutablePath>
+    <CustomBuildBeforeTargets>BuildCompile</CustomBuildBeforeTargets>
     <GenerateManifest>false</GenerateManifest>
-    <ExecutablePath>$(SolutionDir)utils;$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -116,6 +125,13 @@
       <SubSystem>Windows</SubSystem>
       <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
     </Link>
+    <CustomBuildStep>
+      <Command>resources</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Build Resources</Message>
+      <Outputs>emb\resources.h</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -149,9 +165,15 @@
       <GenerateMapFile>true</GenerateMapFile>
       <EntryPointSymbol>entrypoint</EntryPointSymbol>
       <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
-      <HeapReserveSize>4096</HeapReserveSize>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <CustomBuildStep>
+      <Command>resources $(ProjectDir)</Command>
+    </CustomBuildStep>
+    <CustomBuildStep>
+      <Message>Build Resources</Message>
+      <Outputs>emb\resources.h</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">
     <ClCompile>
@@ -176,14 +198,19 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <EntryPointSymbol>entrypoint</EntryPointSymbol>
       <AdditionalOptions>/CRINKLER /COMPMODE:SLOW %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
+      <ProgramDatabaseFile />
+      <TargetMachine>NotSet</TargetMachine>
     </Link>
+    <CustomBuildStep>
+      <Message>Build Resources</Message>
+      <Command>resources</Command>
+      <Outputs>emb\resources.h</Outputs>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,10 +1,8 @@
 #include "stdafx.hxx"
 #include "sys/error.hxx"
 
-namespace game 
+namespace error
 {
-  namespace error
-  {
 #ifndef NDEBUG
 #define GAMEERROR(name, flag, message) \
   error name = { ID::name, flag, TEXT(message) };
@@ -15,19 +13,18 @@ namespace game
 #include "sys/error.inc"
 #undef GAMEERROR
 
-    void error::raise(
+  void error::raise(
 #ifndef NDEBUG
-      LPCTSTR file,
-      LPCTSTR function,
-      size_t  line
+    LPCTSTR file,
+    LPCTSTR function,
+    size_t  line
 #endif
-      )
-    {
-      MessageBeep(MB_ICONERROR);
+    )
+  {
+    MessageBeep(MB_ICONERROR);
 
 
 
-      ExitProcess(EXIT_FAILURE);
-    }
+    ExitProcess(EXIT_FAILURE);
   }
 }

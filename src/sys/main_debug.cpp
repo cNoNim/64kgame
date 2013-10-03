@@ -1,5 +1,5 @@
 #include "stdafx.hxx"
-#include "game.hxx"
+#include "sys/application.hxx"
 
 int WINAPI
 _tWinMain(HINSTANCE /*instance*/, 
@@ -7,6 +7,5 @@ _tWinMain(HINSTANCE /*instance*/,
           LPTSTR /*cmdLine*/, 
           int /*show*/)
 {
-  using namespace game;
   return application::instance().run();
 }

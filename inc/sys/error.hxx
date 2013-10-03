@@ -1,47 +1,44 @@
 #pragma once
 
-namespace game
+namespace error
 {
-  namespace error
+  enum class ID
   {
-    enum class ID 
-    {
 #define GAMEERROR(name,flag,message) \
-      name,
+  name,
 #include "sys/error.inc"
 #undef GAMEERROR
-      count
-    };
+    count
+  };
 
-    enum FLAG
-    {
-      UnknownError = 0,
-      ApplicationError = 1 << 0,
-      WinAPIError  = 1<<1
-    };
+  enum FLAG
+  {
+    UnknownError = 0,
+    ApplicationError = 1 << 0,
+    WinAPIError = 1 << 1
+  };
 
-    struct error
-    {
-      ID index;
-      FLAG flag;
+  struct error
+  {
+    ID index;
+    FLAG flag;
 #ifndef NDEBUG
-      LPCTSTR message;
+    LPCTSTR message;
 #endif
 
-      void raise(
+    void raise(
 #ifndef NDEBUG
-        LPCTSTR file,
-        LPCTSTR function,
-        size_t  line
+      LPCTSTR file,
+      LPCTSTR function,
+      size_t  line
 #endif
-        );
-    };
+      );
+  };
 
 #define GAMEERROR(name, flag, message) \
   extern error name;
 #include "sys/error.inc"
 #undef GAMEERROR
-  }
 }
 
 #ifndef NDEBUG

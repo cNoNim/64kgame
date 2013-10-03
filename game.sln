@@ -1,7 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Express 2013 for Windows Desktop
+VisualStudioVersion = 12.0.20827.3
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "game", "game.vcxproj", "{1AE50072-5938-49C2-8A6B-AC3AE02C5454}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CA479A9B-0E83-4058-81BE-24AED9F34FCC} = {CA479A9B-0E83-4058-81BE-24AED9F34FCC}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "resources", "utils\resources\resources.vcxproj", "{CA479A9B-0E83-4058-81BE-24AED9F34FCC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,6 +23,12 @@ Global
 		{1AE50072-5938-49C2-8A6B-AC3AE02C5454}.Release Crinkler|Win32.Build.0 = Release Crinkler|Win32
 		{1AE50072-5938-49C2-8A6B-AC3AE02C5454}.Release|Win32.ActiveCfg = Release|Win32
 		{1AE50072-5938-49C2-8A6B-AC3AE02C5454}.Release|Win32.Build.0 = Release|Win32
+		{CA479A9B-0E83-4058-81BE-24AED9F34FCC}.Debug|Win32.ActiveCfg = Release|Win32
+		{CA479A9B-0E83-4058-81BE-24AED9F34FCC}.Debug|Win32.Build.0 = Release|Win32
+		{CA479A9B-0E83-4058-81BE-24AED9F34FCC}.Release Crinkler|Win32.ActiveCfg = Release|Win32
+		{CA479A9B-0E83-4058-81BE-24AED9F34FCC}.Release Crinkler|Win32.Build.0 = Release|Win32
+		{CA479A9B-0E83-4058-81BE-24AED9F34FCC}.Release|Win32.ActiveCfg = Release|Win32
+		{CA479A9B-0E83-4058-81BE-24AED9F34FCC}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
