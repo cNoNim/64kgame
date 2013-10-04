@@ -11,7 +11,7 @@ application & application::instance()
 
   auto storage = TlsGetValue(ID);
   if (nullptr == storage) {
-    storage = HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, sizeof(application));
+    storage = malloc(sizeof(application));
     if (nullptr == storage) Raise(error::OutOfMemory);
 
     new (storage) application;

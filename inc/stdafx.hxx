@@ -3,8 +3,10 @@
 #define _HAS_EXCEPTIONS 0
 
 #define _WIN32_WINNT 0x0601
+
 #define WIN32_LEAN_AND_MEAN 1
 #define WIN32_EXTRA_LEAN 1
+
 #include <TChar.h>
 #include <Windows.h>
 #include <GL/GL.h>

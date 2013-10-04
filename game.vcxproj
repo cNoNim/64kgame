@@ -129,7 +129,6 @@
       <WarningLevel>Level4</WarningLevel>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
       <StringPooling>true</StringPooling>
-      <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -147,6 +146,7 @@
       <OmitDefaultLibName>true</OmitDefaultLibName>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -155,7 +155,6 @@
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateMapFile>true</GenerateMapFile>
       <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib;msvcrt.lib</AdditionalDependencies>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
       <Command>resources.exe</Command>
@@ -189,7 +188,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <AdditionalOptions>/CRINKLER /COMPMODE:SLOW %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib;msvcrt.lib;</AdditionalDependencies>
+      <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib;msvcrt.lib</AdditionalDependencies>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <ProgramDatabaseFile />
       <TargetMachine>NotSet</TargetMachine>
