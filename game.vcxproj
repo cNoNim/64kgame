@@ -20,13 +20,7 @@
     <ClCompile Include="src\sys\application.cpp" />
     <ClCompile Include="src\sys\context.cpp" />
     <ClCompile Include="src\sys\error.cpp" />
-    <ClCompile Include="src\sys\main_debug.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\sys\main_reliase.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="src\sys\main.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">Create</PrecompiledHeader>
@@ -90,23 +84,25 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatfromShortName)\</OutDir>
-    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)\$(PlatfromShortName)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Configuration)\$(PlatformShortName)\</IntDir>
     <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatfromShortName)\</OutDir>
-    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)\$(PlatfromShortName)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Configuration)\$(PlatformShortName)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
     <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
+    <LibraryPath>$(SolutionDir)lib\$(PlatformShortName)\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">
-    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatfromShortName)\</OutDir>
-    <IntDir>$(SolutionDir)obj\$(ProjectName)\$(Configuration)\$(PlatfromShortName)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Configuration)\$(PlatformShortName)\</IntDir>
     <ExecutablePath>$(SolutionDir)utils\crinkler;$(ExecutablePath)</ExecutablePath>
     <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
     <GenerateManifest>false</GenerateManifest>
+    <LibraryPath>$(SolutionDir)lib\$(PlatformShortName)\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -158,8 +154,7 @@
       <SubSystem>Windows</SubSystem>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
       <GenerateMapFile>true</GenerateMapFile>
-      <EntryPointSymbol>entrypoint</EntryPointSymbol>
-      <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib;msvcrt.lib</AdditionalDependencies>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <CustomBuildStep>
@@ -193,12 +188,12 @@
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <EntryPointSymbol>entrypoint</EntryPointSymbol>
       <AdditionalOptions>/CRINKLER /COMPMODE:SLOW %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib;msvcrt.lib;</AdditionalDependencies>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <ProgramDatabaseFile />
       <TargetMachine>NotSet</TargetMachine>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
     </Link>
     <CustomBuildStep>
       <Command>resources.exe</Command>
