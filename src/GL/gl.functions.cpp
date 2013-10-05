@@ -10,7 +10,7 @@ GL::init(void)
 {
   static char const FunctionNames[] = {
 #define GLFUNCTION(name, UPPER) \
-  "gl"STRING(name)"\0"
+  "gl" STRING(name) "\0"
 #include "GL/gl.functions.inc"
 #undef GLFUNCTION
     ""

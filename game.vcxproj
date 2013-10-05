@@ -5,6 +5,14 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="LLVM Release Crinkler|Win32">
+      <Configuration>LLVM Release Crinkler</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="LLVM Release|Win32">
+      <Configuration>LLVM Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release Crinkler|Win32">
       <Configuration>Release Crinkler</Configuration>
       <Platform>Win32</Platform>
@@ -26,7 +34,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\sys\time.cpp" />
     <ClCompile Include="src\sys\window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +71,18 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LLVM Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>LLVM-vs2013</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LLVM Release Crinkler|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>LLVM-vs2013</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -77,6 +96,12 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='LLVM Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='LLVM Release Crinkler|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'" Label="PropertySheets">
@@ -96,12 +121,32 @@
     <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
     <LibraryPath>$(SolutionDir)lib\$(PlatformShortName)\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LLVM Release|Win32'">
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Configuration)\$(PlatformShortName)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <GenerateManifest>false</GenerateManifest>
+    <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
+    <LibraryPath>$(SolutionDir)lib\$(PlatformShortName)\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='LLVM Release Crinkler|Win32'">
+    <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Configuration)\$(PlatformShortName)\</IntDir>
+    <LinkIncremental>
+    </LinkIncremental>
+    <GenerateManifest>
+    </GenerateManifest>
+    <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
+    <LibraryPath>$(SolutionDir)lib\$(PlatformShortName)\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
+    <ExecutablePath>$(SolutionDir)utils\crinkler;$(ExecutablePath)</ExecutablePath>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\$(PlatformShortName)\</OutDir>
     <IntDir>$(SolutionDir)obj\$(Configuration)\$(PlatformShortName)\</IntDir>
     <ExecutablePath>$(SolutionDir)utils\crinkler;$(ExecutablePath)</ExecutablePath>
     <CustomBuildBeforeTargets>ClCompile</CustomBuildBeforeTargets>
-    <GenerateManifest>false</GenerateManifest>
+    <GenerateManifest>
+    </GenerateManifest>
     <LibraryPath>$(SolutionDir)lib\$(PlatformShortName)\;$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -141,11 +186,47 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>Full</Optimization>
       <OmitFramePointers>true</OmitFramePointers>
-      <FloatingPointModel>Fast</FloatingPointModel>
       <PrecompiledHeaderFile>stdafx.hxx</PrecompiledHeaderFile>
       <OmitDefaultLibName>true</OmitDefaultLibName>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <ExceptionHandling>false</ExceptionHandling>
+      <FloatingPointModel>Fast</FloatingPointModel>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <SubSystem>Windows</SubSystem>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <GenerateMapFile>true</GenerateMapFile>
+      <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
+    </Link>
+    <CustomBuildStep>
+      <Command>resources.exe</Command>
+      <Message>Build Resources</Message>
+      <Outputs>inc\resources.hxx</Outputs>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='LLVM Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)inc;$(SolutionDir)inc;$(SolutionDir)ext\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <Optimization>Full</Optimization>
+      <OmitFramePointers>true</OmitFramePointers>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PrecompiledHeaderFile>stdafx.hxx</PrecompiledHeaderFile>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ProgramDataBaseFileName />
+      <FloatingPointModel />
+      <MinimalRebuild />
+      <CallingConvention />
+      <DebugInformationFormat>None</DebugInformationFormat>
       <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Link>
@@ -162,6 +243,59 @@
       <Outputs>inc\resources.hxx</Outputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='LLVM Release Crinkler|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)inc;$(SolutionDir)inc;$(SolutionDir)ext\glm;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <Optimization>Full</Optimization>
+      <OmitFramePointers>true</OmitFramePointers>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PrecompiledHeaderFile>stdafx.hxx</PrecompiledHeaderFile>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ProgramDataBaseFileName>
+      </ProgramDataBaseFileName>
+      <FloatingPointModel>
+      </FloatingPointModel>
+      <MinimalRebuild>
+      </MinimalRebuild>
+      <CallingConvention>
+      </CallingConvention>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <ExceptionHandling>false</ExceptionHandling>
+      <AdditionalOptions>-Xclang -std=c++11 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <IgnoreAllDefaultLibraries>
+      </IgnoreAllDefaultLibraries>
+      <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib;MSVCRT.lib</AdditionalDependencies>
+      <AdditionalOptions>/CRINKLER /COMPMODE:SLOW /RANGE:opengl32 /REPORT:"$(IntDir)$(TargetName).crinkler.html" /PRINT:IMPORTS %(AdditionalOptions)</AdditionalOptions>
+      <SuppressStartupBanner />
+      <ProgramDatabaseFile />
+      <RandomizedBaseAddress />
+      <TargetMachine />
+      <LinkErrorReporting />
+      <DataExecutionPrevention />
+      <TypeLibraryResourceID />
+      <ImageHasSafeExceptionHandlers />
+      <ManifestFile />
+      <ProfileGuidedDatabase />
+      <EnableUAC />
+      <UACExecutionLevel />
+      <UACUIAccess />
+    </Link>
+    <CustomBuildStep>
+      <Command>resources.exe</Command>
+      <Message>Build Resources</Message>
+      <Outputs>inc\resources.hxx</Outputs>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Crinkler|Win32'">
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
@@ -169,7 +303,6 @@
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>false</ExceptionHandling>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -184,15 +317,25 @@
       <PrecompiledHeaderFile>stdafx.hxx</PrecompiledHeaderFile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OmitFramePointers>true</OmitFramePointers>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
-      <AdditionalOptions>/CRINKLER /COMPMODE:SLOW %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib;msvcrt.lib</AdditionalDependencies>
+      <AdditionalOptions>/CRINKLER /COMPMODE:SLOW /RANGE:opengl32 /REPORT:"$(IntDir)$(TargetName).crinkler.html" /PRINT:IMPORTS %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>Kernel32.lib;User32.lib;Gdi32.lib;OpenGL32.lib</AdditionalDependencies>
       <SuppressStartupBanner>false</SuppressStartupBanner>
       <ProgramDatabaseFile />
-      <TargetMachine>NotSet</TargetMachine>
-      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <RandomizedBaseAddress />
+      <ImageHasSafeExceptionHandlers />
+      <DataExecutionPrevention />
+      <LinkErrorReporting />
+      <TargetMachine />
+      <TypeLibraryResourceID />
+      <ProfileGuidedDatabase />
+      <ManifestFile />
+      <EnableUAC />
+      <UACExecutionLevel />
+      <UACUIAccess />
     </Link>
     <CustomBuildStep>
       <Command>resources.exe</Command>

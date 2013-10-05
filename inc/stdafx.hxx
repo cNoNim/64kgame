@@ -2,6 +2,26 @@
 
 #define _HAS_EXCEPTIONS 0
 
+#ifndef __has_feature
+# define __has_feature(x) 0
+#endif
+
+#if __has_feature(cxx_constexpr) 
+#else
+# if defined(_MSC_VER)
+#   define _ALLOW_KEYWORD_MACROS
+# endif
+# define constexpr
+#endif
+
+#if __has_feature(cxx_noexcept)
+#else
+# if defined(_MSC_VER)
+#   define _ALLOW_KEYWORD_MACROS
+# endif
+# define noexcept throw ()
+#endif
+
 #define _WIN32_WINNT 0x0601
 
 #define WIN32_LEAN_AND_MEAN 1
@@ -15,11 +35,7 @@
 #include <New>
 #include <CAssert>
 #include <CStdLib>
-
-#include <GLM/GLM.hpp>
-
-#define noexcept throw ()
-#define constexpr
+#include <CMath>
 
 #define STRING(string) #string
 
@@ -28,6 +44,11 @@
 
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 #define THIS_INSTANCE (reinterpret_cast<HINSTANCE>(&__ImageBase))
+
+#if defined(__clang__)
+#undef _MSC_VER
+#endif
+//#include <GLM/GLM.hpp>
 
 #include "sys/error.hxx"
 
